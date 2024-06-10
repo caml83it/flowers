@@ -27,11 +27,4 @@ public class UserController {
         Auth auth = (Auth) authentication.getPrincipal();
         return ResponseEntity.ok(auth.getUser());
     }
-
-    @IsAdmin
-    @GetMapping("/employees")
-    public ResponseEntity<List<User>> getEmployees() {
-        List<User> employees = userService.getEmployees();
-        return ResponseEntity.ok(employees);
-    }
 }

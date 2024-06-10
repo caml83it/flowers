@@ -23,12 +23,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtAuthenticationFilter filter;
+
+    private static final String[] kAuthWhiteList = {
+            "/v1/api-docs/**",
+            "/v2/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/login/**",
+            "/registers/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers("/swagger-ui/**").permitAll()
-                    .requestMatchers("/login/**", "/registers/**").permitAll()
+                    .requestMatchers(kAuthWhiteList).permitAll()
                     .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsServiceImpl)
