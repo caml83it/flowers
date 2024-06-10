@@ -9,6 +9,7 @@ public enum ErrorMessages {
     REQUIRE_ADMIN("Endpoint Must Be Request By Admin"),
     REQUIRE_SUPER_ADMIN("Endpoint Must Be Request By Super Admin"),
     REQUIRE_AUTHORIZE("Endpoint Must Be Authorize"),
+    PRODUCT_NOT_FOUND("Product Not Found"),
     USER_NOT_FOUND("User Not Found");
 
     private final String message;

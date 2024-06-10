@@ -8,3 +8,4 @@ public class UserNotFoundException extends NotFoundException {
         super(ErrorKeys.USER_NOT_FOUND.getCode(), ErrorMessages.USER_NOT_FOUND.getMessage());
     }
 }
+
