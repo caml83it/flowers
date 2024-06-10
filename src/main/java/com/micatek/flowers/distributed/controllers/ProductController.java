@@ -1,5 +1,7 @@
 package com.micatek.flowers.distributed.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.micatek.flowers.application.redis.RedisProductService;
 import com.micatek.flowers.application.services.ProductService;
 import com.micatek.flowers.distributed.requests.PaginationRequest;
 import com.micatek.flowers.distributed.responses.PaginationResponse;
@@ -19,10 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductController {
     private final ProductService productService;
+    private final RedisProductService redisProductService;
 
     @GetMapping
-    public ResponseEntity<PaginationResponse<Product>> getProducts(@Valid @ModelAttribute PaginationRequest request) {
-        Page<Product> paginateUserList = productService.getProducts(request.getPage(), request.getSize());
+    public ResponseEntity<PaginationResponse<Product>> getProducts(@Valid @ModelAttribute PaginationRequest request) throws JsonProcessingException {
+        Page<Product> paginateUserList;
+
+        paginateUserList = redisProductService.getAllProducts(request.getPage(), request.getSize());
+        if (paginateUserList == null) {
+            paginateUserList = productService.getProducts(request.getPage(), request.getSize());
+            redisProductService.saveAllProducts(paginateUserList, paginateUserList.getNumber(), paginateUserList.getSize());
+        }
+
         PaginationResponse<Product> response = new PaginationResponse<>(
             paginateUserList.getContent(),
             paginateUserList.getTotalElements(),

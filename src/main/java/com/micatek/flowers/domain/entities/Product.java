@@ -2,6 +2,7 @@ package com.micatek.flowers.domain.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.micatek.flowers.domain.listeners.ProductListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
+@EntityListeners(ProductListener.class)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
