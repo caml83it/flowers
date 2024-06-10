@@ -9,6 +9,8 @@ public interface RedisProductService {
     void clear();
 
     Page<Product> getAllProducts(int page, int size) throws JsonProcessingException;
+    Product getProduct(Long id) throws JsonProcessingException;
 
     void saveAllProducts(Page<Product> response, int page, int size) throws JsonProcessingException;
+    void saveProduct(Product response, Long id) throws JsonProcessingException;
 }

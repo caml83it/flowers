@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(name = "/products")
@@ -41,5 +38,18 @@ public class ProductController {
             paginateUserList.getSize()
         );
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable Long id) throws JsonProcessingException {
+        Product resultProduct;
+        resultProduct = redisProductService.getProduct(id);
+
+        if (resultProduct == null) {
+            resultProduct = productService.getProduct(id);
+            redisProductService.saveProduct(resultProduct, id);
+        }
+
+        return ResponseEntity.ok(resultProduct);
     }
 }

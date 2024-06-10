@@ -36,13 +36,27 @@ public class RedisProductServiceImpl implements RedisProductService {
         String redisKey = generatePaginationRedisKey(PageRequest.of(page, size));
         String jsonString = (String) redisTemplate.opsForValue().get(redisKey);
         if (jsonString == null) return null;
-        return objectMapper.readValue(jsonString, new TypeReference<Page<Product>>() {
-        });
+        return objectMapper.readValue(jsonString, new TypeReference<Page<Product>>() {});
+    }
+
+    @Override
+    public Product getProduct(Long id) throws JsonProcessingException {
+        String redisKey = generateItemRedisKey(id);
+        String jsonString = (String) redisTemplate.opsForValue().get(redisKey);
+        if (jsonString == null) return null;
+        return objectMapper.readValue(jsonString, new TypeReference<Product>() {});
     }
 
     @Override
     public void saveAllProducts(Page<Product> response, int page, int size) throws JsonProcessingException {
         String redisKey = generatePaginationRedisKey(PageRequest.of(page, size));
+        String jsonString = objectMapper.writeValueAsString(response);
+        redisTemplate.opsForValue().set(redisKey, jsonString);
+    }
+
+    @Override
+    public void saveProduct(Product response, Long id) throws JsonProcessingException {
+        String redisKey = generateItemRedisKey(id);
         String jsonString = objectMapper.writeValueAsString(response);
         redisTemplate.opsForValue().set(redisKey, jsonString);
     }
