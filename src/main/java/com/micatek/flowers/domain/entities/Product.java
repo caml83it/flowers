@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = @Index(columnList = "name", name = "idx_product_name"))
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
